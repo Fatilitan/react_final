@@ -6,7 +6,7 @@ import { EventsPage, loader as postListLoader } from "./pages/EventsPage";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Root } from "./components/Root";
 import { postAction as addEvent } from "./components/ModalScreen";
-import { editAction as editEvent } from "./components/ModalScreenEdit";
+// import { editAction as editEvent } from "./components/ModalScreenEdit";
 import { Errorboundary } from "./components/ErrorBoundary";
 
 const router = createBrowserRouter([
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
       {
         path: "/event/:eventId",
         element: <EventPage />,
-        action: editEvent,
+        // action: editEvent,
         loader: postLoader,
       },
     ],

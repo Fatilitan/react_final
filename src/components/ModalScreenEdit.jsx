@@ -2,25 +2,38 @@ import { Box, Heading, Button } from "@chakra-ui/react";
 import { Form } from "react-router-dom";
 // import placeholder from "../img/placeholder.png";
 
-export const editAction = async ({ request, paramId }) => {
-  console.log(paramId);
-  const formData = Object.fromEntries(await request.formData());
-  //   formData.image = placeholder;
-  formData.startTime = formData.startTime.replace(" ", "T");
-  formData.endTime = formData.endTime.replace(" ", "T");
-  console.log(formData);
-  const response = await fetch(`http://localhost:3000/events/${paramId}`, {
-    method: "PUT",
-    body: JSON.stringify(formData),
-    headers: { "Content-type": "application/json" },
-  })
-    .then((res) => res.json())
-    .then((json) => json.id);
-  return response;
-};
+// export const editAction = async ({ request, paramId }) => {
+//   console.log(paramId);
+//   const formData = Object.fromEntries(await request.formData());
+//   //   formData.image = placeholder;
+//   formData.startTime = formData.startTime.replace(" ", "T");
+//   formData.endTime = formData.endTime.replace(" ", "T");
+//   console.log(formData);
+//   const response = await fetch(`http://localhost:3000/events/${paramId}`, {
+//     method: "PUT",
+//     body: JSON.stringify(formData),
+//     headers: { "Content-type": "application/json" },
+//   })
+//     .then((res) => res.json())
+//     .then((json) => json.id);
+//   return response;
+// };
 
 export const ModalScreenEdit = ({ closeFn, id }) => {
-  console.log(id);
+  const editEvent = async (formData) => {
+    console.log(formData);
+    formData.startTime = formData.startTime.replace(" ", "T");
+    formData.endTime = formData.endTime.replace(" ", "T");
+    const response = await fetch(`http://localhost:3000/events/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(formData),
+      headers: { "Content-type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => json.id);
+    return response;
+  };
+
   return (
     <>
       <Box
@@ -50,7 +63,11 @@ export const ModalScreenEdit = ({ closeFn, id }) => {
         </Button>
         <Form
           method="put"
-          onSubmit={(event) => editAction({ request: event, paramId: id })}
+          onSubmit={(event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            editEvent(formData);
+          }}
           id="new-put-form"
           style={{ width: "100%" }}
         >
