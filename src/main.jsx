@@ -8,6 +8,11 @@ import { Root } from "./components/Root";
 import { postAction as addEvent } from "./components/ModalScreen";
 // import { editAction as editEvent } from "./components/ModalScreenEdit";
 import { Errorboundary } from "./components/ErrorBoundary";
+import {
+  CreateUserPage,
+  loader as userListLoader,
+  action as addUser,
+} from "./pages/CreateUserPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +30,12 @@ const router = createBrowserRouter([
         element: <EventPage />,
         // action: editEvent,
         loader: postLoader,
+      },
+      {
+        path: "/users",
+        element: <CreateUserPage />,
+        loader: userListLoader,
+        action: addUser,
       },
     ],
   },

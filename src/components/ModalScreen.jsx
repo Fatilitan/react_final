@@ -7,6 +7,7 @@ export const postAction = async ({ request }) => {
   formData.image = placeholder;
   formData.startTime = formData.startTime.replace(" ", "T");
   formData.endTime = formData.endTime.replace(" ", "T");
+  formData.createdBy = parseInt();
   console.log(formData);
   const newId = await fetch("http://localhost:3000/events", {
     method: "POST",
@@ -18,7 +19,7 @@ export const postAction = async ({ request }) => {
   return redirect(`/event/${newId}`);
 };
 
-export const ModalScreen = ({ closeFn }) => {
+export const ModalScreen = ({ closeFn, users }) => {
   return (
     <>
       <Box
@@ -105,6 +106,22 @@ export const ModalScreen = ({ closeFn }) => {
               type="text"
               name="endTime"
             />
+          </label>
+          <label
+            style={{
+              width: "100%",
+              display: "inline-block",
+              marginBottom: "1rem",
+            }}
+          >
+            <span style={{ marginRight: "1rem" }}>User</span>
+            <select placeholder="users" name="createdBy">
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
           </label>
           <Button type="submit">Submit</Button>
         </Form>

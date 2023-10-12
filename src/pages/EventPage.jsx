@@ -15,20 +15,30 @@ import { useLoaderData } from "react-router-dom";
 import { ModalScreenEdit } from "../components/ModalScreenEdit";
 
 export const loader = async ({ params }) => {
-  const eventsData = await fetch(
+  const event = await fetch(
     `http://localhost:3000/events/${params.eventId}` //params pakt de eventId
   );
-  const event = await eventsData.json();
-  return event;
+  const users = await fetch(`http://localhost:3000/users`);
+  return { event: await event.json(), users: await users.json() };
 };
 
 export const EventPage = () => {
-  const event = useLoaderData();
+  const { event, users } = useLoaderData();
   const eventDate = event.startTime.slice(0, 10);
   const eventStart = event.startTime.slice(11, 16);
   const eventEnd = event.endTime.slice(11, 16);
 
-  console.log(event.id);
+  const userId = event.createdBy;
+
+  let user;
+
+  for (let findUser of users) {
+    if (findUser.id == userId) {
+      user = findUser;
+    }
+  }
+
+  console.log(userId, user);
 
   const [addEventScreen, setAddEventScreen] = useState(null);
 
@@ -42,7 +52,11 @@ export const EventPage = () => {
         flexWrap={"wrap"}
       >
         {addEventScreen && (
-          <ModalScreenEdit closeFn={setAddEventScreen} id={event.id} />
+          <ModalScreenEdit
+            closeFn={setAddEventScreen}
+            id={event.id}
+            event={event}
+          />
         )}
         <Flex
           width={"70%"}
@@ -92,6 +106,22 @@ export const EventPage = () => {
               {eventEnd}
             </Badge>
           </Text>
+          <Text textAlign={"center"} margin={"1rem 0 2rem 0"}>
+            This event is created by:
+          </Text>
+          <Flex justifyContent={"space-around"}>
+            <Flex alignItems={"center"}>
+              <Image
+                src={user.image}
+                w={"50px"}
+                h={"50px"}
+                borderRadius={"50%"}
+                objectFit={"cover"}
+                marginRight={"1rem"}
+              />
+              <Text fontWeight={700}>{user.name}</Text>
+            </Flex>
+          </Flex>
         </Box>
       </Flex>
     </>

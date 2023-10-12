@@ -1,4 +1,5 @@
 import { Box, Heading, Button } from "@chakra-ui/react";
+import { useState } from "react";
 import { Form } from "react-router-dom";
 // import placeholder from "../img/placeholder.png";
 
@@ -19,19 +20,16 @@ import { Form } from "react-router-dom";
 //   return response;
 // };
 
-export const ModalScreenEdit = ({ closeFn, id }) => {
-  const editEvent = async (formData) => {
-    console.log(formData);
-    formData.startTime = formData.startTime.replace(" ", "T");
-    formData.endTime = formData.endTime.replace(" ", "T");
-    const response = await fetch(`http://localhost:3000/events/${id}`, {
+export const ModalScreenEdit = ({ closeFn, id, event }) => {
+  const [formEvent, setFormEvent] = useState(event);
+  const editEvent = async () => {
+    await fetch(`http://localhost:3000/events/${id}`, {
       method: "PUT",
-      body: JSON.stringify(formData),
+      body: JSON.stringify(formEvent),
       headers: { "Content-type": "application/json" },
     })
       .then((res) => res.json())
       .then((json) => json.id);
-    return response;
   };
 
   return (
@@ -63,11 +61,7 @@ export const ModalScreenEdit = ({ closeFn, id }) => {
         </Button>
         <Form
           method="put"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            editEvent(formData);
-          }}
+          onSubmit={editEvent}
           id="new-put-form"
           style={{ width: "100%" }}
         >
@@ -80,6 +74,9 @@ export const ModalScreenEdit = ({ closeFn, id }) => {
               aria-label="Title"
               type="text"
               name="title"
+              onChange={(e) =>
+                setFormEvent({ ...formEvent, title: e.target.value })
+              }
             />
           </label>
           <label
@@ -91,6 +88,9 @@ export const ModalScreenEdit = ({ closeFn, id }) => {
               aria-label="Description"
               type="text"
               name="description"
+              onChange={(e) =>
+                setFormEvent({ ...formEvent, description: e.target.value })
+              }
             />
           </label>
           <label
@@ -102,6 +102,9 @@ export const ModalScreenEdit = ({ closeFn, id }) => {
               aria-label="Location"
               type="text"
               name="location"
+              onChange={(e) =>
+                setFormEvent({ ...formEvent, location: e.target.value })
+              }
             />
           </label>
           <label
@@ -113,6 +116,9 @@ export const ModalScreenEdit = ({ closeFn, id }) => {
               aria-label="Date"
               type="text"
               name="startTime"
+              onChange={(e) =>
+                setFormEvent({ ...formEvent, startTime: e.target.value })
+              }
             />
           </label>
           <label
@@ -128,6 +134,9 @@ export const ModalScreenEdit = ({ closeFn, id }) => {
               aria-label="Time"
               type="text"
               name="endTime"
+              onChange={(e) =>
+                setFormEvent({ ...formEvent, endTime: e.target.value })
+              }
             />
           </label>
           <Button type="submit">Submit</Button>

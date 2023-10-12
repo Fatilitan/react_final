@@ -8,21 +8,20 @@ import { TextInput } from "../components/ui/TextInput";
 import { Errorboundary } from "../components/ErrorBoundary";
 
 export const loader = async () => {
-  const eventsData = await fetch("http://localhost:3000/events");
-  const events = await eventsData.json();
-  return events;
+  const events = await fetch("http://localhost:3000/events");
+  const users = await fetch("http://localhost:3000/users");
+  return { events: await events.json(), users: await users.json() };
 };
 
 export const EventsPage = () => {
-  const events = useLoaderData();
+  const { events, users } = useLoaderData();
   const [addEventScreen, setAddEventScreen] = useState(null);
   const [searchField, setSearchField] = useState("");
-
-  console.log(events);
 
   const matchedEvents = [];
 
   for (let event of events) {
+    console.log(event.title, event.description, event.location);
     if (
       event.title.toLowerCase().includes(searchField.toLowerCase()) ||
       event.description.toLowerCase().includes(searchField.toLowerCase()) ||
@@ -47,7 +46,9 @@ export const EventsPage = () => {
         height={"100%"}
         minHeight={"100vh"}
       >
-        {addEventScreen && <ModalScreen closeFn={setAddEventScreen} />}
+        {addEventScreen && (
+          <ModalScreen closeFn={setAddEventScreen} users={users} />
+        )}
         <Flex width={"100%"} justifyContent={"space-between"}>
           <Button onClick={setAddEventScreen}>Add event</Button>
           <TextInput onChange={handleChange} />

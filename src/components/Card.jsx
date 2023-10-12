@@ -12,6 +12,7 @@ export const Card = ({
   const date = dateAndTime.slice(0, 10);
   const timeStart = dateAndTime.slice(11, 16);
   const timeEnd = endTime.slice(11, 16);
+  console.log();
   return (
     <>
       <Link to={`event/${id}`}>
@@ -34,7 +35,12 @@ export const Card = ({
             height={"180px"}
             objectFit={"cover"}
           />
-          <Heading fontSize={"1.8rem"} textAlign={"center"} paddingTop={"1rem"}>
+          <Heading
+            fontSize={"1.8rem"}
+            h={"4.5rem"}
+            textAlign={"center"}
+            paddingTop={"1rem"}
+          >
             {title}
           </Heading>
           <Text textAlign={"center"} paddingTop={"1rem"}>
@@ -44,7 +50,7 @@ export const Card = ({
             fontSize={"1rem"}
             backgroundColor={"green.400"}
             display={"block"}
-            margin={"2rem auto"}
+            margin={"1rem auto"}
             w={"6rem"}
             textAlign={"center"}
           >
