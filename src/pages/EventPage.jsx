@@ -19,11 +19,16 @@ export const loader = async ({ params }) => {
     `http://localhost:3000/events/${params.eventId}` //params pakt de eventId
   );
   const users = await fetch(`http://localhost:3000/users`);
-  return { event: await event.json(), users: await users.json() };
+  const categories = await fetch(`http://localhost:3000/categories`);
+  return {
+    event: await event.json(),
+    users: await users.json(),
+    categories: await categories.json(),
+  };
 };
 
 export const EventPage = () => {
-  const { event, users } = useLoaderData();
+  const { event, users, categories } = useLoaderData();
   const eventDate = event.startTime.slice(0, 10);
   const eventStart = event.startTime.slice(11, 16);
   const eventEnd = event.endTime.slice(11, 16);
@@ -38,7 +43,20 @@ export const EventPage = () => {
     }
   }
 
-  console.log(userId, user);
+  const categoryId = event.categoryIds;
+
+  let matchedCategories = [];
+
+  for (let category of categories) {
+    for (let id of categoryId) {
+      if (category.id == id) {
+        console.log(category);
+        matchedCategories.push(category);
+      }
+    }
+  }
+
+  console.log(matchedCategories);
 
   const [addEventScreen, setAddEventScreen] = useState(null);
 
@@ -92,6 +110,12 @@ export const EventPage = () => {
               {event.location}
             </ListItem>
           </List>
+          <Text textAlign={"center"} marginTop={"1rem"}>
+            Category:{" "}
+            {matchedCategories.map((category) => (
+              <span key={category.id}>{category.name} </span>
+            ))}
+          </Text>
           <Text textAlign={"center"} margin={"1rem 0 2rem 0"}>
             This event will take place on {eventDate} from
             <Badge

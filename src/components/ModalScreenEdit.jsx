@@ -27,9 +27,10 @@ export const ModalScreenEdit = ({ closeFn, id, event }) => {
       method: "PUT",
       body: JSON.stringify(formEvent),
       headers: { "Content-type": "application/json" },
-    })
-      .then((res) => res.json())
-      .then((json) => json.id);
+    });
+    return location.reload();
+    // .then((res) => res.json())
+    // .then((json) => json.id);
   };
 
   return (
@@ -59,12 +60,7 @@ export const ModalScreenEdit = ({ closeFn, id, event }) => {
         >
           Close
         </Button>
-        <Form
-          method="put"
-          onSubmit={editEvent}
-          id="new-put-form"
-          style={{ width: "100%" }}
-        >
+        <Form onSubmit={editEvent} id="new-put-form" style={{ width: "100%" }}>
           <label
             style={{ width: "100%", display: "block", marginBottom: "1rem" }}
           >
