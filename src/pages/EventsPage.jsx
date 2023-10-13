@@ -23,23 +23,62 @@ export const EventsPage = () => {
   const { events, users, categories } = useLoaderData();
   const [addEventScreen, setAddEventScreen] = useState(null);
   const [searchField, setSearchField] = useState("");
-  const [filters, setFilters] = useState();
+  const [filters, setFilters] = useState([]);
 
   const matchedEvents = [];
 
-  for (let event of events) {
-    // hier gaat iets fout met de conditionals
-    if (
-      ((filters != undefined || null) &&
-        event.title.toLowerCase().includes(searchField.toLowerCase())) ||
-      event.description.toLowerCase().includes(searchField.toLowerCase()) ||
-      event.location.toLowerCase().includes(searchField.toLowerCase())
-    ) {
-      matchedEvents.push(event);
-    } else if (event.categoryIds.includes(parseInt(filters))) {
-      matchedEvents.push(event);
+  if (filters.length == 0) {
+    for (let event of events) {
+      if (
+        event.title.toLowerCase().includes(searchField.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchField.toLowerCase()) ||
+        event.location.toLowerCase().includes(searchField.toLowerCase())
+      ) {
+        matchedEvents.push(event);
+      }
+    }
+  } else {
+    for (let filter of filters) {
+      for (let event of events) {
+        if (event.categoryIds.includes(filter)) {
+          if (
+            event.title.toLowerCase().includes(searchField.toLowerCase()) ||
+            event.description
+              .toLowerCase()
+              .includes(searchField.toLowerCase()) ||
+            event.location.toLowerCase().includes(searchField.toLowerCase())
+          ) {
+            if (!matchedEvents.includes(event)) {
+              matchedEvents.push(event);
+            }
+          }
+        }
+      }
     }
   }
+
+  // for (let event of events) {
+  //   if (filters.length == 0) {
+  //     if (
+  //       event.title.toLowerCase().includes(searchField.toLowerCase()) ||
+  //       event.description.toLowerCase().includes(searchField.toLowerCase()) ||
+  //       event.location.toLowerCase().includes(searchField.toLowerCase())
+  //     ) {
+  //       matchedEvents.push(event);
+  //     }
+  //   } else {
+  //     for (let filter of filters) {
+  //       console.log(filter);
+  //     }
+  //     if (
+  //       event.title.toLowerCase().includes(searchField.toLowerCase()) ||
+  //       event.description.toLowerCase().includes(searchField.toLowerCase()) ||
+  //       event.location.toLowerCase().includes(searchField.toLowerCase())
+  //     ) {
+  //       matchedEvents.push(event);
+  //     }
+  //   }
+  // }
 
   const handleChange = (event) => {
     setSearchField(event.target.value);
@@ -47,9 +86,13 @@ export const EventsPage = () => {
 
   const handleFilter = (event) => {
     if (event.target.checked) {
-      setFilters(event.target.id);
-    } else if (!event.target.checked) {
-      setFilters(() => setFilters());
+      const newFilters = [...filters, parseInt(event.target.id)];
+      setFilters(newFilters);
+    } else {
+      const newFilters = filters.filter(
+        (filterId) => filterId !== parseInt(event.target.id)
+      );
+      setFilters(newFilters);
     }
   };
 
@@ -76,8 +119,8 @@ export const EventsPage = () => {
                 key={catFilter.id}
                 id={catFilter.id}
                 name={catFilter.name}
-                changeFn={setFilters}
-                onClick={handleFilter}
+                // changeFn={setFilters}
+                onClick={(event) => handleFilter(event)}
               />
             ))}
           </div>

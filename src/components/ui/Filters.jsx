@@ -1,4 +1,4 @@
-export const Filters = ({ name, id, changeFn, ...props }) => {
+export const Filters = ({ name, id, ...props }) => {
   return (
     <>
       <input
@@ -6,7 +6,6 @@ export const Filters = ({ name, id, changeFn, ...props }) => {
         name={name}
         id={id}
         style={{ margin: "0 0.5rem" }}
-        onClick={changeFn()}
         {...props}
       />
       <label htmlFor={name}>{name}</label>

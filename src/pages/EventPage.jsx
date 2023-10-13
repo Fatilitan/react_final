@@ -133,7 +133,7 @@ export const EventPage = () => {
           <Text textAlign={"center"} margin={"1rem 0 2rem 0"}>
             This event is created by:
           </Text>
-          <Flex justifyContent={"space-around"}>
+          <Flex justifyContent={"space-around"} marginBottom={"2rem"}>
             <Flex alignItems={"center"}>
               <Image
                 src={user.image}
