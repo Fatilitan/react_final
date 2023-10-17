@@ -12,9 +12,6 @@ export const Navigation = () => {
             <Link to="/">Events</Link>
           </ListItem>
           <ListItem marginLeft={"2rem"} marginTop={"1rem"}>
-            <Link to="/event/1">Event</Link>
-          </ListItem>
-          <ListItem marginLeft={"2rem"} marginTop={"1rem"}>
             <Link to="/users">Users</Link>
           </ListItem>
         </Flex>

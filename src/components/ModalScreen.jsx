@@ -1,5 +1,5 @@
-import { Box, Heading, Button } from "@chakra-ui/react";
-import { Form, redirect } from "react-router-dom";
+import { Box, Heading, Button, Text } from "@chakra-ui/react";
+import { Form, redirect, Link } from "react-router-dom";
 import placeholder from "../img/placeholder.png";
 
 export const postAction = async ({ request }) => {
@@ -7,8 +7,9 @@ export const postAction = async ({ request }) => {
   formData.image = placeholder;
   formData.startTime = formData.startTime.replace(" ", "T");
   formData.endTime = formData.endTime.replace(" ", "T");
-  formData.createdBy = parseInt();
-  console.log(formData);
+  formData.createdBy = parseInt(formData.createdBy);
+  formData.categoryIds = [parseInt(formData.categoryIds)];
+  console.log(formData.categoryIds);
   const newId = await fetch("http://localhost:3000/events", {
     method: "POST",
     body: JSON.stringify(formData),
@@ -19,7 +20,7 @@ export const postAction = async ({ request }) => {
   return redirect(`/event/${newId}`);
 };
 
-export const ModalScreen = ({ closeFn, users }) => {
+export const ModalScreen = ({ closeFn, users, categories }) => {
   return (
     <>
       <Box
@@ -114,6 +115,22 @@ export const ModalScreen = ({ closeFn, users }) => {
               marginBottom: "1rem",
             }}
           >
+            <span style={{ marginRight: "1rem" }}>Categories</span>
+            <select placeholder="Categories" name="categoryIds">
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label
+            style={{
+              width: "100%",
+              display: "inline-block",
+              marginBottom: "1rem",
+            }}
+          >
             <span style={{ marginRight: "1rem" }}>User</span>
             <select placeholder="users" name="createdBy">
               {users.map((user) => (
@@ -122,6 +139,15 @@ export const ModalScreen = ({ closeFn, users }) => {
                 </option>
               ))}
             </select>
+            <Text fontSize={"0.7rem"}>
+              If you dont see your name, first create your own user account{" "}
+              <Link
+                to="/users"
+                style={{ color: "#800080", textDecoration: "underline" }}
+              >
+                here
+              </Link>
+            </Text>
           </label>
           <Button type="submit">Submit</Button>
         </Form>

@@ -13,6 +13,7 @@ import {
 import logo from "../img/icon-locatie.svg";
 import { useLoaderData } from "react-router-dom";
 import { ModalScreenEdit } from "../components/ModalScreenEdit";
+import { DeleteToast } from "../components/DeleteToast";
 
 export const loader = async ({ params }) => {
   const event = await fetch(
@@ -56,9 +57,10 @@ export const EventPage = () => {
     }
   }
 
-  console.log(matchedCategories);
+  console.log(event.image);
 
-  const [addEventScreen, setAddEventScreen] = useState(null);
+  const [editEventScreen, setEditEventScreen] = useState(null);
+  const [deleteEventScreen, setDeleteEventScreen] = useState(null);
 
   return (
     <>
@@ -69,9 +71,17 @@ export const EventPage = () => {
         backgroundColor={"blue.300"}
         flexWrap={"wrap"}
       >
-        {addEventScreen && (
+        {editEventScreen && (
           <ModalScreenEdit
-            closeFn={setAddEventScreen}
+            closeFn={setEditEventScreen}
+            id={event.id}
+            event={event}
+            categories={categories}
+          />
+        )}
+        {deleteEventScreen && (
+          <DeleteToast
+            closeFn={setDeleteEventScreen}
             id={event.id}
             event={event}
           />
@@ -81,7 +91,8 @@ export const EventPage = () => {
           margin={"1rem auto"}
           justifyContent={"space-between"}
         >
-          <Button onClick={setAddEventScreen}>Edit event</Button>
+          <Button onClick={setEditEventScreen}>Edit event</Button>
+          <Button onClick={setDeleteEventScreen}>Delete event</Button>
         </Flex>
         <Box
           w={"70%"}

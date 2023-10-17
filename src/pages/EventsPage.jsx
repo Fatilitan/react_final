@@ -57,29 +57,6 @@ export const EventsPage = () => {
     }
   }
 
-  // for (let event of events) {
-  //   if (filters.length == 0) {
-  //     if (
-  //       event.title.toLowerCase().includes(searchField.toLowerCase()) ||
-  //       event.description.toLowerCase().includes(searchField.toLowerCase()) ||
-  //       event.location.toLowerCase().includes(searchField.toLowerCase())
-  //     ) {
-  //       matchedEvents.push(event);
-  //     }
-  //   } else {
-  //     for (let filter of filters) {
-  //       console.log(filter);
-  //     }
-  //     if (
-  //       event.title.toLowerCase().includes(searchField.toLowerCase()) ||
-  //       event.description.toLowerCase().includes(searchField.toLowerCase()) ||
-  //       event.location.toLowerCase().includes(searchField.toLowerCase())
-  //     ) {
-  //       matchedEvents.push(event);
-  //     }
-  //   }
-  // }
-
   const handleChange = (event) => {
     setSearchField(event.target.value);
   };
@@ -109,7 +86,11 @@ export const EventsPage = () => {
         minHeight={"100vh"}
       >
         {addEventScreen && (
-          <ModalScreen closeFn={setAddEventScreen} users={users} />
+          <ModalScreen
+            closeFn={setAddEventScreen}
+            users={users}
+            categories={categories}
+          />
         )}
         <Flex width={"100%"} justifyContent={"space-between"}>
           <Button onClick={setAddEventScreen}>Add event</Button>

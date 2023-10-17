@@ -1,36 +1,23 @@
 import { Box, Heading, Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { Form } from "react-router-dom";
-// import placeholder from "../img/placeholder.png";
+import { Toast } from "./Toast";
 
-// export const editAction = async ({ request, paramId }) => {
-//   console.log(paramId);
-//   const formData = Object.fromEntries(await request.formData());
-//   //   formData.image = placeholder;
-//   formData.startTime = formData.startTime.replace(" ", "T");
-//   formData.endTime = formData.endTime.replace(" ", "T");
-//   console.log(formData);
-//   const response = await fetch(`http://localhost:3000/events/${paramId}`, {
-//     method: "PUT",
-//     body: JSON.stringify(formData),
-//     headers: { "Content-type": "application/json" },
-//   })
-//     .then((res) => res.json())
-//     .then((json) => json.id);
-//   return response;
-// };
-
-export const ModalScreenEdit = ({ closeFn, id, event }) => {
+export const ModalScreenEdit = ({ closeFn, id, event, categories }) => {
   const [formEvent, setFormEvent] = useState(event);
+  const [toast, setToast] = useState(null);
+  const [fetchState, setFetchState] = useState(null);
   const editEvent = async () => {
-    await fetch(`http://localhost:3000/events/${id}`, {
+    const response = await fetch(`http://localhost:3000/events/${id}`, {
       method: "PUT",
       body: JSON.stringify(formEvent),
       headers: { "Content-type": "application/json" },
     });
-    return location.reload();
-    // .then((res) => res.json())
-    // .then((json) => json.id);
+    if (response.ok) {
+      setFetchState(true);
+    } else {
+      setFetchState(false);
+    }
   };
 
   return (
@@ -51,6 +38,7 @@ export const ModalScreenEdit = ({ closeFn, id, event }) => {
         display={"flex"}
         flexWrap={"wrap"}
       >
+        {toast && <Toast state={fetchState} />}
         <Heading size={"l"}>Add event</Heading>
         <Button
           position={"absolute"}
@@ -135,7 +123,38 @@ export const ModalScreenEdit = ({ closeFn, id, event }) => {
               }
             />
           </label>
-          <Button type="submit">Submit</Button>
+          <label
+            style={{
+              width: "100%",
+              display: "inline-block",
+              marginBottom: "1rem",
+            }}
+          >
+            <span style={{ marginRight: "1rem" }}>Categories</span>
+            <select
+              placeholder="Categories"
+              name="categoryIds"
+              onChange={(e) =>
+                setFormEvent({ ...formEvent, endTime: e.target.value })
+              }
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label
+            style={{
+              width: "100%",
+              display: "inline-block",
+              marginBottom: "1rem",
+            }}
+          ></label>
+          <Button type="submit" onClick={setToast}>
+            Submit
+          </Button>
         </Form>
       </Box>
     </>
